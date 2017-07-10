@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+		<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDk0DbSAozLdQjprZnSVDkMu5uNR6G7Wfo&callback=initMap" type="text/javascript"></script>
+        <style type="text/css">
+              #mapDiv { width: 800px; height: 500px; }
+        </style>
+        <script type="text/javascript">
+            var map;
+            var myLatLng = {lat: -7.531673, lng: 110.657196}; 
+            var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            var labelIndex = 0;
+	            function initMap () {
+	                    google.maps.visualRefresh = true;
+	                    lat = -7.781673, lng = 111.657196;
+	                    var myLatLng = new google.maps.LatLng(lat, lng)
+	                    var mapOptions = {
+                        	center: myLatLng,
+                        	zoom: 18,
+                        	mapTypeId: google.maps.MapTypeId.ROADMAP
+	                    };
+
+
+	                    var mapElement = document.getElementById('mapDiv');
+	                    	map = new google.maps.Map(mapElement, mapOptions);
+							if (navigator.geolocation) {
+							navigator.geolocation.getCurrentPosition(function(position) {
+							console.log(position);
+								var lat = position.coords.latitude;
+								var lng = position.coords.longitude;
+								var devCenter =  new google.maps.LatLng(lat, lng);
+								map.setCenter(devCenter);
+								map.setZoom(18);												 
+							});
+						}
+						
+						
+						startButtonEvents();
+							google.maps.event.addListener(map, 'click', function(event) { 
+							addMarker(event.latLng, map); });
+							addMarker(devCenter);
+						}
+						
+						
+						function addMarker(location, map) {
+							var marker = new google.maps.Marker({
+								position: location,
+								label: labels[labelIndex++ % labels.length],
+								map: map
+							});
+						}
+						function startButtonEvents () {  
+							document.getElementById('btnRoad').addEventListener('click', function(){
+							   map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+							});
+							
+							document.getElementById('btnTer').addEventListener('click', function(){
+							   map.setMapTypeId(google.maps.MapTypeId.TERRAIN);
+							});
+				   
+							document.getElementById('btnSat').addEventListener('click', function(){
+							   map.setMapTypeId(google.maps.MapTypeId.SATELLITE);
+							});
+							   
+							document.getElementById('btnHyb').addEventListener('click', function(){
+							   map.setMapTypeId(google.maps.MapTypeId.HYBRID);
+							});
+						}
+
+						function pilihLokasi() {
+                		}
+
+	            google.maps.event.addDomListener(window, 'load', initMap);					
+		</script>
+    </head>
+    <body>
+		<b>Merubah tipe PETA</b><br/>
+        <input id="btnRoad" type="button" value="Roadmap">
+        <input id="btnTer" type="button" value="Terrain">
+		<input id="btnSat" type="button" value="Satellite">
+        <input id="btnHyb" type="button" value="Hybrid">
+        <p> klik pada peta untuk memberi tanda </p>
+        <hr>
+        <div id="mapDiv"></div>
+        <hr>
+    </body>
+</html>
